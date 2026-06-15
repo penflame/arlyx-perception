@@ -3,7 +3,8 @@ from pydantic import BaseModel
 import httpx
 import os
 
-from vision import analyze_image   # <-- FIX ICI
+from vision import analyze_image
+from ocr import extract_text
 
 app = FastAPI(title="ARLYX Perception v2.1")
 
@@ -35,6 +36,12 @@ async def ingest(payload: IngestPayload):
 async def vision_endpoint(file: UploadFile = File(...)):
     result = await analyze_image(file)
     return {"status": "ok", "analysis": result}
+
+
+@app.post("/ocr/")
+async def ocr_endpoint(file: UploadFile = File(...)):
+    result = await extract_text(file)
+    return {"status": "ok", "ocr": result}
 
 
 if __name__ == "__main__":
