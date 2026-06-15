@@ -3,7 +3,7 @@ from pydantic import BaseModel
 import httpx
 import os
 
-from app.vision import analyze_image
+from vision import analyze_image   # <-- FIX ICI
 
 app = FastAPI(title="ARLYX Perception v2.1")
 
@@ -37,7 +37,6 @@ async def vision_endpoint(file: UploadFile = File(...)):
     return {"status": "ok", "analysis": result}
 
 
-# 🔥 LE SERVEUR UVICORN QUI MANQUAIT 🔥
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=9000)
