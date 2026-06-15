@@ -5,3 +5,4 @@ pydantic
 Pillow
 python-multipart
 pytesseract
+faster-whisper

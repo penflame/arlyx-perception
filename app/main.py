@@ -5,6 +5,7 @@ import os
 
 from vision import analyze_image
 from ocr import extract_text
+from audio import transcribe_audio
 
 app = FastAPI(title="ARLYX Perception v2.1")
 
@@ -42,6 +43,12 @@ async def vision_endpoint(file: UploadFile = File(...)):
 async def ocr_endpoint(file: UploadFile = File(...)):
     result = await extract_text(file)
     return {"status": "ok", "ocr": result}
+
+
+@app.post("/audio/")
+async def audio_endpoint(file: UploadFile = File(...)):
+    result = await transcribe_audio(file)
+    return {"status": "ok", "audio": result}
 
 
 if __name__ == "__main__":
