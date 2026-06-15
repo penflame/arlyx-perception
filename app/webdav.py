@@ -1,5 +1,6 @@
 import httpx
 import os
+from webdav_parser import parse_webdav_xml
 
 WEBDAV_URL = os.getenv("NEXTCLOUD_WEBDAV_URL")
 WEBDAV_USER = os.getenv("NEXTCLOUD_USER")
@@ -17,6 +18,14 @@ async def scan_webdav():
                 headers={"Depth": "1"},
                 timeout=10
             )
-            return {"status": "ok", "raw_xml": r.text}
+
+            parsed = parse_webdav_xml(r.text)
+
+            return {
+                "status": "ok",
+                "count": len(parsed),
+                "items": parsed
+            }
+
         except Exception as e:
             return {"status": "error", "detail": str(e)}
