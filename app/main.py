@@ -6,6 +6,7 @@ import os
 from vision import analyze_image
 from ocr import extract_text
 from audio import transcribe_audio
+from webdav import scan_webdav
 
 app = FastAPI(title="ARLYX Perception v2.1")
 
@@ -49,6 +50,12 @@ async def ocr_endpoint(file: UploadFile = File(...)):
 async def audio_endpoint(file: UploadFile = File(...)):
     result = await transcribe_audio(file)
     return {"status": "ok", "audio": result}
+
+
+@app.get("/webdav/scan/")
+async def webdav_scan():
+    result = await scan_webdav()
+    return result
 
 
 if __name__ == "__main__":
