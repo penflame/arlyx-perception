@@ -1,7 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, File
 from pydantic import BaseModel
 import httpx
 import os
+
+from vision import analyze_image
 
 app = FastAPI(title="ARLYX Perception v2.1")
 
@@ -27,3 +29,9 @@ async def ingest(payload: IngestPayload):
             return {"status": "forwarded", "core_status": r.status_code}
         except Exception as e:
             return {"status": "error", "detail": str(e)}
+
+
+@app.post("/vision/")
+async def vision_endpoint(file: UploadFile = File(...)):
+    result = await analyze_image(file)
+    return {"status": "ok", "analysis": result}
